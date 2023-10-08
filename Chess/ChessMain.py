@@ -3,6 +3,7 @@ gets user input and displaying current state objects
 """
 
 import pygame as p
+
 from Chess import ChessEngine
 
 WIDTH = HEIGHT = 512
@@ -34,8 +35,8 @@ def main():
                 running = False
             elif e.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos()  # x, y location of mouse
-                c = location[0]//SQ_SIZE
-                r = location[1]//SQ_SIZE
+                c = int(location[0]//SQ_SIZE)
+                r = int(location[1]//SQ_SIZE)
                 if sqSelected == (r, c):
                     sqSelected = ()
                     playerClicks = []
@@ -50,6 +51,7 @@ def main():
                     playerClicks = []
 
         drawGameState(screen, gs)
+        highlightSquares(screen, gs, sqSelected)
         clock.tick(MAX_FPS)
         p.display.flip()
 
@@ -90,6 +92,17 @@ def drawPieces(screen, board):
                 screen.blit(IMAGES[piece], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
     pass
+
+def highlightSquares(screen, gs, sqSelected):
+    if sqSelected!= ():
+        r,c = sqSelected
+        if gs.board[r][c][0]== ("w" if gs.whiteToMove else "b"):
+            s=p.Surface((SQ_SIZE,SQ_SIZE))
+            s.set_alpha(100)
+            s.fill(p.Color('blue'))
+            screen.blit(s, (c*SQ_SIZE, r*SQ_SIZE))
+
+
 
 
 if __name__ == '__main__':
